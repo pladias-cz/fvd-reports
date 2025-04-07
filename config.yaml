@@ -1,0 +1,9 @@
+database:
+  dbname: "nazev_db"
+  host: "localhost"
+  port: 5432
+  user: "uzivatel"
+  password: "heslo"
+  view: "public.tvoje_pohled"
+  postgis_table: "public.geodata"
+  popup_column: "nazev_sloupce"

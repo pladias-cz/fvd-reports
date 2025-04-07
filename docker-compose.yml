@@ -1,0 +1,5 @@
+services:
+  rocker:
+    build: ./
+    ports:
+      - 8180:8180
