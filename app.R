@@ -6,6 +6,13 @@ library(sf)
 library(yaml)
 
 config <- yaml::read_yaml("config.yaml")
+base_path <- Sys.getenv("BASE_PATH", unset = "/data/")
+
+head_tags <- if (base_path != "/") {
+  tags$head(tags$base(href = base_path))
+} else {
+  NULL
+}
 
 get_connection <- function() {
   dbConnect(
@@ -42,7 +49,7 @@ options(shiny.host = "0.0.0.0")
 options(shiny.port = 8180)
 
 ui <- navbarPage("Moje aplikace",
-
+    header = head_tags,
   tabPanel("Úvod",
     fluidPage(
       h2("Vítej!"),
