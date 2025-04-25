@@ -7,6 +7,7 @@ library(yaml)
 library(readr)
 library(writexl)
 library(markdown)
+library(DT)
 
 base_path <- Sys.getenv("BASE_PATH", unset = "/data/")
 

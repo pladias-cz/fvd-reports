@@ -4,8 +4,8 @@ mod_squares_ui <- function(id) {
     fluidPage(
       includeMarkdown("texts/squares.md"),
       downloadButton(ns("download_squares_xlsx"), "Download XLSX"),
-      tableOutput(ns("sql_squares_data"))
-    )
+        DT::dataTableOutput(ns("sql_squares_data"))
+        )
   )
 }
 
@@ -16,12 +16,23 @@ mod_squares_server <- function(input, output, session) {
     conn <- get_connection()
     on.exit(dbDisconnect(conn), add = TRUE)
     query <- read_file("sql/squares.sql")
-    dbGetQuery(conn, query)
+    result <- dbGetQuery(conn, query)
+
+    # Debug výstup do logu
+    print("=== sql_squares_result ===")
+    print(str(result))
+    print(head(result))
+
+    result
   })
 
-  output$sql_squares_data <- renderTable({
-    sql_squares_result()
-  })
+  output$sql_squares_data <- DT::renderDataTable({
+                               DT::datatable(sql_squares_result(), options = list(
+                                 pageLength = 10,
+                                 dom = 'Bfrtip',
+                                 buttons = c('copy', 'csv', 'excel')
+                               ), extensions = 'Buttons')
+                             })
 
   output$download_squares_xlsx <- downloadHandler(
     filename = function() {
