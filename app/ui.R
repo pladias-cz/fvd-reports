@@ -1,4 +1,4 @@
-source("modules/mod_table.R")
+source("modules/mod_squares.R")
 source("modules/mod_map.R")
 
 shinyUI <- navbarPage("FVD reports",
@@ -10,7 +10,7 @@ shinyUI <- navbarPage("FVD reports",
   ),
 
   tabPanel("Squares overview",
-    mod_table_ui("table1")
+    mod_squares_ui("table1")
   )
 
 #   ,tabPanel("Map",

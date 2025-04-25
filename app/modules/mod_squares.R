@@ -1,15 +1,15 @@
-mod_table_ui <- function(id) {
+mod_squares_ui <- function(id) {
   ns <- NS(id)
   tagList(
     fluidPage(
-      h2("Squares"),
+      includeMarkdown("texts/squares.md"),
       downloadButton(ns("download_squares_xlsx"), "Download XLSX"),
       tableOutput(ns("sql_squares_data"))
     )
   )
 }
 
-mod_table_server <- function(input, output, session) {
+mod_squares_server <- function(input, output, session) {
   ns <- session$ns
 
   sql_squares_result <- reactive({
