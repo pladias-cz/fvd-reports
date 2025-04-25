@@ -23,7 +23,7 @@ mod_squares_server <- function(input, output, session) {
     sql_squares_result()
   })
 
-  output$download_xlsx <- downloadHandler(
+  output$download_squares_xlsx <- downloadHandler(
     filename = function() {
       paste0("squares_", Sys.Date(), ".xlsx")
     },

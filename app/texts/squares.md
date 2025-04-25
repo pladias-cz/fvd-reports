@@ -1,5 +1,9 @@
 ## Squares summarization
-1) kolik je udaju na ctverec celkem v celem uzemi
-2) kolik je taxonu na ctverec celkem v celem uzemi
-3) kolik je udaju na ctverec celkem od roku 2000 do 2025(2010-2025) v celem uzemi
-4) kolik je taxonů na čtverec celkem od roku 2000 do 2025(2010-2025) v celem uzemi
+1) how many records in square
+2) how many taxa in square
+3) how many records in square in time range 2000-2025(2010-2025) 
+4) how many taxa in square in time range 2000-2025(2010-2025)
+
+taxa counts are computed individually from Pladias and GBIF data, the "union" column represents sum of unique taxa in both sources united...
+
+Please be patient, the query takes more than 30s...
