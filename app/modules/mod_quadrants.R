@@ -3,8 +3,7 @@ mod_quadrants_ui <- function(id) {
   tagList(
     fluidPage(
       includeMarkdown("texts/quadrants.md"),
-      downloadButton(ns("download_quadrants_xlsx"), "Download XLSX"),
-      tableOutput(ns("sql_quadrants_data"))
+      DT::dataTableOutput(ns("sql_quadrants_data"))
     )
   )
 }
@@ -19,17 +18,13 @@ mod_quadrants_server <- function(input, output, session) {
     dbGetQuery(conn, query)
   })
 
-  output$sql_quadrants_data <- renderTable({
-    sql_quadrants_result()
-  })
+  output$sql_quadrants_data <- DT::renderDataTable({
+      DT::datatable(sql_quadrants_result(),
+       options = list(
+        paging = FALSE,
+        dom = 'Bt',
+        buttons = c('copy', 'csv', 'excel')
+      ), extensions = 'Buttons', rownames = FALSE)
+    })
 
-  output$download_quadrants_xlsx <- downloadHandler(
-    filename = function() {
-      paste0("quadrants", Sys.Date(), ".xlsx")
-    },
-    content = function(file) {
-      write_xlsx(sql_quadrants_result(), path = file)
-    },
-    contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  )
 }
