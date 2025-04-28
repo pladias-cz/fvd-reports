@@ -15,7 +15,7 @@ mod_map_server <- function(input, output, session) {
   sf_data <- st_as_sf(data, wkt = "wkt_geom", crs = 4326)
 
 
-  output$mapa <- renderLeaflet({
+  output$map1 <- renderLeaflet({
       pal <- colorNumeric(
         palette = "Reds",
         domain = sf_data$pocet
@@ -28,7 +28,7 @@ mod_map_server <- function(input, output, session) {
           weight = 1,
           opacity = 1,
           color = "black",
-          fillOpacity = 0.7,
+          fillOpacity = 0.6,
           popup = ~paste0("taxa diff: ", pocet)
         ) %>%
         addLegend(
