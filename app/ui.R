@@ -10,14 +10,15 @@ shinyUI <- navbarPage("FVD reports",
     )
   ),
 
-  tabPanel("Squares overview",
+tabPanel("Squares overview",
     mod_squares_ui("table1")
   ),
 
 tabPanel("Quadrants overview",
     mod_quadrants_ui("table2")
+  ),
+
+tabPanel("Map",
+    mod_map_ui("map1")
   )
-#   ,tabPanel("Map",
-#     mod_map_ui("map1")
-#   )
 )

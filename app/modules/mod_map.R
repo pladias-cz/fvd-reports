@@ -1,31 +1,41 @@
 mod_map_ui <- function(id) {
   ns <- NS(id)
   fluidPage(
-    h2("Mapa s PostGIS daty"),
-    leafletOutput(ns("mapa"), height = "600px")
+    includeMarkdown("texts/map1.md"),
+    leafletOutput(ns("map1"), height = "600px")
   )
 }
 
 mod_map_server <- function(input, output, session) {
   ns <- session$ns
 
-  generate_fake_map_data <- function() {
-    st_as_sf(data.frame(
-      id = 1:10,
-      name = sample(c("Point A", "Point B", "Point C"), 10, replace = TRUE),
-      lat = runif(10, min = 48.5, max = 50.5),
-      lon = runif(10, min = 14.5, max = 16.5)
-    ), coords = c("lon", "lat"), crs = 4326)
-  }
+    conn <- get_connection()
+    query <- read_file("sql/map1.sql")
+    data <- dbGetQuery(conn, query)
+  sf_data <- st_as_sf(data, wkt = "wkt_geom", crs = 4326)
+
 
   output$mapa <- renderLeaflet({
-    sf_data <- generate_fake_map_data()
-    leaflet(sf_data) %>%
-      addProviderTiles("CartoDB.Positron") %>%
-      addCircleMarkers(
-        radius = 5,
-        color = "blue",
-        popup = ~as.character(sf_data$name)
+      pal <- colorNumeric(
+        palette = "Reds",
+        domain = sf_data$pocet
       )
-  })
+
+      leaflet(sf_data) %>%
+        addProviderTiles("CartoDB.Positron") %>%
+        addPolygons(
+          fillColor = ~pal(pocet),
+          weight = 1,
+          opacity = 1,
+          color = "black",
+          fillOpacity = 0.7,
+          popup = ~paste0("taxa diff: ", pocet)
+        ) %>%
+        addLegend(
+          pal = pal,
+          values = sf_data$pocet,
+          title = "taxa_diff",
+          opacity = 1
+        )
+    })
 }

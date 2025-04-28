@@ -8,8 +8,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /home/shiny-app
-RUN R -e "install.packages(c('dplyr', 'ggplot2', 'DBI', 'RPostgres', 'leaflet', 'sf', 'yaml','readr', 'writexl', 'markdown'))"
-RUN R -e "install.packages(c('DT'))"
+RUN R -e "install.packages(c('dplyr', 'ggplot2', 'DBI', 'RPostgres', 'leaflet', 'sf', 'yaml','readr', 'writexl', 'markdown', 'DT', 'sf'))"
+RUN R -e "install.packages(c())"
 
 COPY app /home/shiny-app
 

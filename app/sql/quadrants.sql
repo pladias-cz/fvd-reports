@@ -72,7 +72,6 @@ SELECT s.code as quadrant,
        ) as union_4_2010
 FROM geodata.quadrants_full s
          JOIN geodata.regions r ON (ST_Intersects(r.geom, s.geom_wgs))
-JOIN geodata.squares_full ss ON (ss.id = s.square_id)
 
 WHERE r.id = 3
 ORDER BY quadrant
