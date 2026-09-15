@@ -11,7 +11,8 @@ SELECT s.code as quadrant,
         WHERE rec.validation_status IN (0,4) AND ST_Intersects(rec.coords_wgs, s.geom_wgs)) as pladias_2,
     --Q2 union, that is unique taxa across both sources
        (SELECT count(DISTINCT tt.pladias_taxon_id)
-        FROM gbif.records gbif JOIN gbif.taxa tt ON (tt.taxon_key = gbif.taxon_key)
+        FROM gbif.records gbif  JOIN gbif.taxa tt ON (tt.col_id = gbif.taxon_col_id)
+
         WHERE ST_Intersects(gbif.coords, s.geom_wgs)) as gbif_2,
 
           (SELECT COUNT(*) AS total_unique_taxa
@@ -25,7 +26,7 @@ SELECT s.code as quadrant,
 
                     SELECT tt.pladias_taxon_id
                     FROM gbif.records gbif
-                             JOIN gbif.taxa tt ON tt.taxon_key = gbif.taxon_key
+                             JOIN gbif.taxa tt ON (tt.col_id = gbif.taxon_col_id)
                     WHERE ST_Intersects(gbif.coords, s.geom_wgs)
                 ) sub
            ) as union_2,
@@ -39,13 +40,13 @@ SELECT s.code as quadrant,
         FROM atlas.records rec
         WHERE rec.validation_status IN (0,4) AND ST_Intersects(rec.coords_wgs, s.geom_wgs)  AND EXTRACT(YEAR FROM datum) > 1999) as pladias_4_2000,
        (SELECT count(DISTINCT tt.pladias_taxon_id)
-        FROM gbif.records gbif JOIN gbif.taxa tt ON (tt.taxon_key = gbif.taxon_key)
+        FROM gbif.records gbif JOIN gbif.taxa tt ON (tt.col_id = gbif.taxon_col_id)
         WHERE ST_Intersects(gbif.coords, s.geom_wgs) AND gbif.year > 1999) as gbif_4_2000,
        (SELECT count(DISTINCT rec.taxon_id)
         FROM atlas.records rec
         WHERE rec.validation_status IN (0,4) AND ST_Intersects(rec.coords_wgs, s.geom_wgs)  AND EXTRACT(YEAR FROM datum) > 2009) as pladias_4_2010,
        (SELECT count(DISTINCT tt.pladias_taxon_id)
-        FROM gbif.records gbif JOIN gbif.taxa tt ON (tt.taxon_key = gbif.taxon_key)
+        FROM gbif.records gbif JOIN gbif.taxa tt ON (tt.col_id = gbif.taxon_col_id)
         WHERE ST_Intersects(gbif.coords, s.geom_wgs) AND gbif.year > 2009) as gbif_4_2010,
         --Q4 unions
        (SELECT COUNT(*) AS total_unique_taxa
@@ -55,7 +56,7 @@ SELECT s.code as quadrant,
                   WHERE rec.validation_status IN (0,4) AND ST_Intersects(rec.coords_wgs, s.geom_wgs)  AND EXTRACT(YEAR FROM datum) > 1999
                      UNION
                SELECT  tt.pladias_taxon_id
-                FROM gbif.records gbif JOIN gbif.taxa tt ON (tt.taxon_key = gbif.taxon_key)
+                FROM gbif.records gbif JOIN gbif.taxa tt ON (tt.col_id = gbif.taxon_col_id)
                 WHERE ST_Intersects(gbif.coords, s.geom_wgs) AND gbif.year > 1999
                      ) sub
        ) as union_4_2000,
@@ -66,7 +67,7 @@ SELECT s.code as quadrant,
                  WHERE rec.validation_status IN (0,4) AND ST_Intersects(rec.coords_wgs, s.geom_wgs)  AND EXTRACT(YEAR FROM datum) > 2009
                  UNION
                  SELECT  tt.pladias_taxon_id
-                 FROM gbif.records gbif JOIN gbif.taxa tt ON (tt.taxon_key = gbif.taxon_key)
+                 FROM gbif.records gbif JOIN gbif.taxa tt ON (tt.col_id = gbif.taxon_col_id)
                  WHERE ST_Intersects(gbif.coords, s.geom_wgs) AND gbif.year > 2009
              ) sub
        ) as union_4_2010

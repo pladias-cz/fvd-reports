@@ -10,7 +10,7 @@ FROM (SELECT s.geom_wgs                                                as geom,
              --Q2 union, that is unique taxa across both sources
              (SELECT count(DISTINCT tt.pladias_taxon_id)
               FROM gbif.records gbif
-                       JOIN gbif.taxa tt ON (tt.taxon_key = gbif.taxon_key)
+                       JOIN gbif.taxa tt ON (tt.col_id = gbif.taxon_col_id)
               WHERE ST_Intersects(gbif.coords, s.geom_wgs))            as gbif_2,
 
              (SELECT COUNT(*) AS total_unique_taxa
@@ -23,7 +23,7 @@ FROM (SELECT s.geom_wgs                                                as geom,
 
                     SELECT tt.pladias_taxon_id
                     FROM gbif.records gbif
-                             JOIN gbif.taxa tt ON tt.taxon_key = gbif.taxon_key
+                             JOIN gbif.taxa tt ON (tt.col_id = gbif.taxon_col_id)
                     WHERE ST_Intersects(gbif.coords, s.geom_wgs)) sub) as total
 
       FROM geodata.quadrants_full s
