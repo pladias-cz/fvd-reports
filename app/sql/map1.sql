@@ -21,7 +21,7 @@ FROM (SELECT s.geom_wgs                                                as geom,
 
                     UNION
 
-                    SELECT COALESCE(tt.pladias_taxon_id, tt.id + 5000000) --to cover also austria-only taxa with NULL in pladias_taxon_id
+                    SELECT COALESCE(tt.pladias_taxon_id, tt.fsg_taxon_id + 5000000) --to cover also austria-only taxa with NULL in pladias_taxon_id
                     FROM gbif.records gbif
                              JOIN gbif.taxa tt ON (tt.col_id = gbif.taxon_col_id)
                     WHERE ST_Intersects(gbif.coords, s.geom_wgs)) sub) as total
