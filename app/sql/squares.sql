@@ -27,7 +27,9 @@ SELECT s.code as square,
                     SELECT COALESCE(tt.pladias_taxon_id, tt.fsg_taxon_id + 5000000)
                     FROM gbif.records gbif
                              JOIN gbif.taxa tt ON (tt.col_id = gbif.taxon_col_id)
-                    WHERE ST_Intersects(gbif.coords, s.geom_wgs)
+                    WHERE ST_Intersects(gbif.coords, s.geom_wgs) AND COALESCE(
+                            tt.pladias_taxon_id,
+                            tt.fsg_taxon_id + 5000000 ) IS NOT NULL
                 ) sub
            ) as union_2,
     --Q3
@@ -57,7 +59,9 @@ SELECT s.code as square,
                      UNION
                  SELECT  COALESCE(tt.pladias_taxon_id, tt.fsg_taxon_id + 5000000)
                 FROM gbif.records gbif JOIN gbif.taxa tt ON (tt.col_id = gbif.taxon_col_id)
-                WHERE ST_Intersects(gbif.coords, s.geom_wgs) AND gbif.year > 1999
+                WHERE ST_Intersects(gbif.coords, s.geom_wgs) AND gbif.year > 1999 AND COALESCE(
+                        tt.pladias_taxon_id,
+                        tt.fsg_taxon_id + 5000000 ) IS NOT NULL
                      ) sub
        ) as union_4_2000,
        (SELECT COUNT(*) AS total_unique_taxa
@@ -68,7 +72,9 @@ SELECT s.code as square,
                  UNION
                  SELECT  COALESCE(tt.pladias_taxon_id, tt.fsg_taxon_id + 5000000)
                  FROM gbif.records gbif JOIN gbif.taxa tt ON (tt.col_id = gbif.taxon_col_id)
-                 WHERE ST_Intersects(gbif.coords, s.geom_wgs) AND gbif.year > 2009
+                 WHERE ST_Intersects(gbif.coords, s.geom_wgs) AND gbif.year > 2009 AND COALESCE(
+                         tt.pladias_taxon_id,
+                         tt.fsg_taxon_id + 5000000 ) IS NOT NULL
              ) sub
        ) as union_4_2010
 FROM geodata.squares_full s
